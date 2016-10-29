@@ -54,7 +54,7 @@ func hw3spek(c *iris.Context) {
 
   <wsdl:service name="helloService">
     <wsdl:port name="helloPort" binding="hy:helloBinding">
-      <soap:address location="http://prakash.sisdis.ui.ac.id/tugas3/server"/>
+      <soap:address location="https://prakash.sisdis.ui.ac.id/tugas3/server"/>
     </wsdl:port>
   </wsdl:service>
 

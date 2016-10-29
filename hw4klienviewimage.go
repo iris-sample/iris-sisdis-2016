@@ -17,7 +17,7 @@ type JSONResp struct {
 
 func hw4klienviewimage(c *iris.Context) {
 	fileName := c.Param("name")
-	r, _ := http.Get("http://localhost:7070/tugas4/server/getImage/" + fileName)
+	r, _ := http.Get("https://prakash.sisdis.ui.ac.id/tugas4/server/getImage/" + fileName)
 	data, _ := ioutil.ReadAll(r.Body)
 	r.Body.Close()
 	jsonD := []byte(string(data))

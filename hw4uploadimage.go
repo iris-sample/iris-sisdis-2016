@@ -34,7 +34,7 @@ func hw4postuploadimage(c *iris.Context) {
 	request.IsiBerkas = base64Str
 	request.NamaBerkas = fileName
 	out, err := json.Marshal(request)
-	r, err := http.Post("http://localhost:7070/tugas4/server/postImage", "application/json", bytes.NewBuffer(out))
+	r, err := http.Post("https://prakash.sisdis.ui.ac.id/tugas4/server/postImage", "application/json", bytes.NewBuffer(out))
 	if err != nil {
 		result = "Not connected."
 	} else {

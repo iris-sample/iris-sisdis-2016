@@ -13,8 +13,6 @@ func main() {
 func startIris() {
 	iris.Config.IsDevelopment = true
 	iris.UseTemplate(html.New()).Directory("resources/templates", ".html")
-	iris.Static("/js", "resources/static/js", 1)
-	iris.Static("/css", "resources/static/css", 1)
 	iris.Use(logger.New())
 	iris.Get("/", hw2)
 	iris.Get("/tugas3/klien", hw3clientget)
