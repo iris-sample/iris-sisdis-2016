@@ -58,8 +58,7 @@ func hw3spek(c *iris.Context) {
     </wsdl:port>
   </wsdl:service>
 
-</wsdl:definitions>
-    `
+</wsdl:definitions>`
 	c.SetContentType("text/xml")
 	c.SetBodyString(data)
 }

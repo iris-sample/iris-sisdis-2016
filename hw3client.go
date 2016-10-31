@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -19,9 +18,7 @@ type WSDLHw3Address struct {
 }
 
 type RequestHello struct {
-	XMLName      xml.Name `xml:"Envelope"`
-	Header       string   `xml:"Header"`
-	HelloRequest string   `xml:"Body>HelloRequest"`
+	HelloRequest string `xml:"Body>HelloRequest"`
 }
 
 func hw3clientget(c *iris.Context) {
@@ -32,8 +29,6 @@ func hw3clientpost(c *iris.Context) {
 	var resp string
 	url := c.FormValueString("url")
 	kata := c.FormValueString("string")
-	fmt.Print(url)
-	fmt.Print(kata)
 	if url == "" && kata == "" {
 		resp = "Invalid WSDL URL and no string"
 	} else if url == "" {
@@ -51,10 +46,17 @@ func hw3clientpost(c *iris.Context) {
 			var q1 WSDLHw3
 			xml.Unmarshal(xml1, &q1)
 			url := q1.Addr.URL
-			buffer := new(RequestHello)
-			buffer.HelloRequest = kata
-			out, err := xml.Marshal(buffer)
-			r2, err := http.Post(url, "text/xml", bytes.NewBuffer(out))
+			var data = `<soapenv:Envelope
+				xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+				xmlns:hy="http://www.herongyang.com/Service/">
+			<soapenv:Header/>
+			<soapenv:Body>
+				<hy:HelloRequest>`
+			data += kata
+			data += `</hy:HelloRequest>
+				</soapenv:Body>
+			</soapenv:Envelope>`
+			r2, err := http.Post(url, "text/xml", bytes.NewBuffer([]byte(data)))
 			if err != nil {
 				resp = "Unexpected Error"
 			} else {

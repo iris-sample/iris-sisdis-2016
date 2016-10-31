@@ -24,5 +24,7 @@ func startIris() {
 	iris.Post("/tugas4/klien/uploadImage", hw4postuploadimage)
 	iris.Post("/tugas4/server/postImage", hw4serveruploadimage)
 	iris.Get("/tugas4/server/getImage/:name", hw4servergetimage)
+	iris.Get("/ewallet/wallet.wsdl", ewalletWSDL)
+	iris.Post("/ewallet/server", ewalletServer)
 	iris.Listen(":7070")
 }
