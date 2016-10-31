@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/iris-contrib/middleware/logger"
 	"github.com/kataras/go-template/html"
-	"github.com/kataras/iris"
+	"gopkg.in/iris-contrib/middleware.v4/logger"
+	iris "gopkg.in/kataras/iris.v4"
 )
 
 func main() {

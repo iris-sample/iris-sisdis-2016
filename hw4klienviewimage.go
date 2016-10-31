@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/kataras/iris"
 	filetype "gopkg.in/h2non/filetype.v0"
+	iris "gopkg.in/kataras/iris.v4"
 )
 
 type JSONResp struct {

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/kataras/iris"
+import iris "gopkg.in/kataras/iris.v4"
 
 func hw3spek(c *iris.Context) {
 	var data = `<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"

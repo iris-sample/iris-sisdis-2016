@@ -1,6 +1,6 @@
 package main
 
-import "github.com/kataras/iris"
+import iris "gopkg.in/kataras/iris.v4"
 
 type ReplyHello struct {
 	HelloResponse string `xml:"Body>HelloResponse"`

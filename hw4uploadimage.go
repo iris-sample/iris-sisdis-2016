@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/kataras/iris"
+	iris "gopkg.in/kataras/iris.v4"
 )
 
 type JSONReq struct {

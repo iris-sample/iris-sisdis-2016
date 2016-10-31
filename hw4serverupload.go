@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kataras/iris"
+	iris "gopkg.in/kataras/iris.v4"
 )
 
 func hw4serveruploadimage(c *iris.Context) {

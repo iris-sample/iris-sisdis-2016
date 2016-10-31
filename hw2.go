@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"os/exec"
 
+	iris "gopkg.in/kataras/iris.v4"
+
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/kataras/iris"
 )
 
 func hw2(c *iris.Context) {

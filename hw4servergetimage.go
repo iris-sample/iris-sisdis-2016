@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	iris "gopkg.in/kataras/iris.v4"
+
 	humanize "github.com/dustin/go-humanize"
-	"github.com/kataras/iris"
 )
 
 func hw4servergetimage(c *iris.Context) {
