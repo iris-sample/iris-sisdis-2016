@@ -32,5 +32,7 @@ func startIris() {
 		https://URL_EWALLET_PESERTA_SISDIS/ewallet/transfer
 	*/
 	iris.Get("/ewallet/ping", ewalletPing)
+	iris.Get("/ewallet/getSaldo", ewalletGetSaldo)
+	iris.Post("/ewallet/register", ewalletRegister)
 	iris.Listen(":7070")
 }

@@ -24,8 +24,8 @@ func ewalletPing(c *iris.Context) {
 func ewalletGetSaldo(c *iris.Context) {
 	userID := c.URLParam("user_id")
 	var nilaiSaldo int
-	db, err := sql.Open("mysql", "root:password2016@/sisdis")
-	stmtOut, err := db.Prepare("SELECT nilai_saldo FROM ewallet WHERE id = ?")
+	db, err := sql.Open("mysql", "root:root@/ewallet")
+	stmtOut, err := db.Prepare("SELECT saldo FROM data_pengguna WHERE id = ?")
 	err = stmtOut.QueryRow(userID).Scan(&nilaiSaldo)
 	if err != nil {
 		nilaiSaldo = -1
@@ -42,7 +42,15 @@ func ewalletGetTotalSaldo(c *iris.Context) {
 }
 
 func ewalletRegister(c *iris.Context) {
-
+	req := new(JSONRegister)
+	c.ReadJSON(req)
+	db, err := sql.Open("mysql", "root:root@/ewallet")
+	stmt, _ := db.Prepare("INSERT data_pengguna SET id=?,ip=?,nama=?,saldo=?")
+	_, err = stmt.Exec(req.UserID, req.IPDomisili, req.Nama, 100000)
+	db.Close()
+	if err != nil {
+		c.JSON(iris.StatusOK, iris.Map{"error": "Already Registered"})
+	}
 }
 
 func ewalletTransfer(c *iris.Context) {
