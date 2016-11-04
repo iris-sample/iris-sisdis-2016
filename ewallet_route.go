@@ -35,7 +35,7 @@ func ewalletGetSaldo(c *iris.Context) {
 }
 
 func ewalletGetTotalSaldo(c *iris.Context) {
-	userID := c.URLParam("user_id")
+	// userID := c.URLParam("user_id")
 	// Not Found
 	// c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": -1})
 	c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": 1000})
