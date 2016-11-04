@@ -24,7 +24,13 @@ func startIris() {
 	iris.Post("/tugas4/klien/uploadImage", hw4postuploadimage)
 	iris.Post("/tugas4/server/postImage", hw4serveruploadimage)
 	iris.Get("/tugas4/server/getImage/:name", hw4servergetimage)
-	iris.Get("/ewallet/wallet.wsdl", ewalletWSDL)
-	iris.Post("/ewallet/server", ewalletServer)
+	/*
+		https://URL_EWALLET_PESERTA_SISDIS/ewallet/ping
+		https://URL_EWALLET_PESERTA_SISDIS/ewallet/register
+		https://URL_EWALLET_PESERTA_SISDIS/ewallet/getSaldo
+		https://URL_EWALLET_PESERTA_SISDIS/ewallet/getTotalSaldo
+		https://URL_EWALLET_PESERTA_SISDIS/ewallet/transfer
+	*/
+	iris.Get("/ewallet/ping", ewalletPing)
 	iris.Listen(":7070")
 }

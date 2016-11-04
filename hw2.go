@@ -22,6 +22,7 @@ func hw2(c *iris.Context) {
 	stmtOut, err = db.Prepare("SELECT info FROM hw2 WHERE id = ?")
 	err = stmtOut.QueryRow(2).Scan(&uptime)
 	_ = err
+	db.Close()
 	c.MustRender("hw2.html", struct {
 		Hello  string
 		Uptime string
