@@ -129,9 +129,10 @@ func ewalletTransfer(c *iris.Context) {
 			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
 			return
 		}
+		newSaldo := req.Nilai + data.NilaiSaldo
 		db, err := sql.Open("mysql", "root:password2016@/ewallet")
-		stmt, _ := db.Prepare("UPDATE data_pengguna SET saldo=? where id=?")
-		_, err = stmt.Exec(req.Nilai+data.NilaiSaldo, req.UserID)
+		stmt, _ := db.Prepare("UPDATE data_pengguna SET saldo = ? WHERE id = ? ")
+		_, err = stmt.Exec(newSaldo, req.UserID)
 		db.Close()
 		if err != nil {
 			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
