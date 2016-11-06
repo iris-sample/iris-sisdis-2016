@@ -23,6 +23,10 @@ type JSONPing struct {
 	Pong int `json:"pong"`
 }
 
+type JSONSaldo struct {
+	NilaiSaldo int `json:"nilai_saldo"`
+}
+
 func ewalletPing(c *iris.Context) {
 	c.JSON(iris.StatusOK, iris.Map{"pong": 1})
 }
@@ -45,11 +49,49 @@ func ewalletGetSaldo(c *iris.Context) {
 }
 
 func ewalletGetTotalSaldo(c *iris.Context) {
-	if checkQuorum() == 8 {
-		// userID := c.URLParam("user_id")
-		// Not Found
-		// c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": -1})
-		c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": 1000})
+	if checkQuorum() >= 8 {
+		userID := c.URLParam("user_id")
+		var ip string
+		db, err := sql.Open("mysql", "root:password2016@/ewallet")
+		stmt, _ := db.Prepare("SELECT ip FROM data_pengguna WHERE id = ?")
+		err = stmt.QueryRow(userID).Scan(&ip)
+		db.Close()
+		if err != nil {
+			c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": -1})
+			return
+		}
+		if ip == "prakash.sisdis.ui.ac.id" || ip == "152.118.33.98" {
+			total := 0
+			listIP := [9]string{"prakash.sisdis.ui.ac.id", "aditya.sisdis.ui.ac.id", "ratna.sisdis.ui.ac.id", "azhari.sisdis.ui.ac.id", "kurniawan.sisdis.ui.ac.id", "alhafis.sisdis.ui.ac.id", "putra.sisdis.ui.ac.id", "radityo.sisdis.ui.ac.id", "ilham.sisdis.ui.ac.id"}
+			for x := 0; x < 9; x++ {
+				request, err := http.Get("https://" + listIP[x] + "/ewallet/getSaldo?user_id=" + userID)
+				if err != nil {
+				} else {
+					decodeJSON := json.NewDecoder(request.Body)
+					var data JSONSaldo
+					err = decodeJSON.Decode(&data)
+					if err != nil {
+					} else {
+						if data.NilaiSaldo != -1 {
+							total += data.NilaiSaldo
+						}
+					}
+				}
+			}
+			c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": total})
+		} else {
+			request, err := http.Get("https://" + ip + "/ewallet/getTotalSaldo?user_id=" + userID)
+			if err != nil {
+			} else {
+				decodeJSON := json.NewDecoder(request.Body)
+				var data JSONSaldo
+				err = decodeJSON.Decode(&data)
+				if err != nil {
+				} else {
+					c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": data.NilaiSaldo})
+				}
+			}
+		}
 	} else {
 		c.JSON(iris.StatusOK, iris.Map{"error": "Quorum tidak tercapai"})
 	}
@@ -75,9 +117,27 @@ func ewalletTransfer(c *iris.Context) {
 	if checkQuorum() >= 5 {
 		req := new(JSONTransfer)
 		c.ReadJSON(req)
-		// Fail
-		// c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
-		c.JSON(iris.StatusOK, iris.Map{"status_transfer": 0})
+		request, err := http.Get("https://prakash.sisdis.ui.ac.id/ewallet/getSaldo?user_id=" + req.UserID)
+		if err != nil {
+			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
+			return
+		}
+		decodeJSON := json.NewDecoder(request.Body)
+		var data JSONSaldo
+		_ = decodeJSON.Decode(&data)
+		if data.NilaiSaldo == -1 {
+			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
+			return
+		}
+		db, err := sql.Open("mysql", "root:password2016@/ewallet")
+		stmt, _ := db.Prepare("UPDATE data_pengguna SET saldo=? where id=?")
+		_, err = stmt.Exec(req.Nilai+data.NilaiSaldo, req.UserID)
+		db.Close()
+		if err != nil {
+			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
+		} else {
+			c.JSON(iris.StatusOK, iris.Map{"status_transfer": 0})
+		}
 	} else {
 		c.JSON(iris.StatusOK, iris.Map{"error": "Quorum tidak tercapai"})
 	}
@@ -85,8 +145,8 @@ func ewalletTransfer(c *iris.Context) {
 
 func checkQuorum() (total int) {
 	total = 0
-	listIP := [8]string{"192.168.75.70", "192.168.75.75", "192.168.75.77", "192.168.75.78", "192.168.75.81", "192.168.75.93", "192.168.75.98", "192.168.75.105"}
-	for x := 0; x < 8; x++ {
+	listIP := [9]string{"prakash.sisdis.ui.ac.id", "aditya.sisdis.ui.ac.id", "ratna.sisdis.ui.ac.id", "azhari.sisdis.ui.ac.id", "kurniawan.sisdis.ui.ac.id", "alhafis.sisdis.ui.ac.id", "putra.sisdis.ui.ac.id", "radityo.sisdis.ui.ac.id", "ilham.sisdis.ui.ac.id"}
+	for x := 0; x < 9; x++ {
 		request, err := http.Get("https://" + listIP[x] + "/ewallet/ping")
 		if err != nil {
 		} else {
