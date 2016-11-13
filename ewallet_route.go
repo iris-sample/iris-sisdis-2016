@@ -28,11 +28,6 @@ type JSONSaldo struct {
 	NilaiSaldo int `json:"nilai_saldo"`
 }
 
-type JSONReplyRegister struct {
-	Status string `json:"status"`
-	Reason string `json:"reason"`
-}
-
 func ewalletPing(c *iris.Context) {
 	c.JSON(iris.StatusOK, iris.Map{"pong": 1})
 }
@@ -66,7 +61,7 @@ func ewalletGetTotalSaldo(c *iris.Context) {
 			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "nilai_saldo": -1})
 			return
 		}
-		if ip == "prakash.sisdis.ui.ac.id" || ip == "152.118.33.98" {
+		if ip == "prakash.sisdis.ui.ac.id" {
 			total := 0
 			listIP := [9]string{"prakash.sisdis.ui.ac.id", "aditya.sisdis.ui.ac.id", "ratna.sisdis.ui.ac.id", "azhari.sisdis.ui.ac.id", "kurniawan.sisdis.ui.ac.id", "alhafis.sisdis.ui.ac.id", "putra.sisdis.ui.ac.id", "radityo.sisdis.ui.ac.id", "ilham.sisdis.ui.ac.id"}
 			for x := 0; x < 9; x++ {
@@ -127,14 +122,14 @@ func ewalletTransfer(c *iris.Context) {
 		c.ReadJSON(req)
 		request, err := http.Get("https://prakash.sisdis.ui.ac.id/ewallet/getSaldo?user_id=" + req.UserID)
 		if err != nil {
-			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
+			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "status_transfer": -1})
 			return
 		}
 		decodeJSON := json.NewDecoder(request.Body)
 		var data JSONSaldo
 		_ = decodeJSON.Decode(&data)
 		if data.NilaiSaldo == -1 {
-			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
+			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "status_transfer": -1})
 			return
 		}
 		newSaldo := req.Nilai + data.NilaiSaldo
