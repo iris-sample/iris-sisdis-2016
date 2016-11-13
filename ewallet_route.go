@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"database/sql"
 	"encoding/json"
 	"net/http"
@@ -27,6 +28,11 @@ type JSONSaldo struct {
 	NilaiSaldo int `json:"nilai_saldo"`
 }
 
+type JSONReplyRegister struct {
+	Status string `json:"status"`
+	Reason string `json:"reason"`
+}
+
 func ewalletPing(c *iris.Context) {
 	c.JSON(iris.StatusOK, iris.Map{"pong": 1})
 }
@@ -42,9 +48,9 @@ func ewalletGetSaldo(c *iris.Context) {
 			nilaiSaldo = -1
 		}
 		db.Close()
-		c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": nilaiSaldo})
+		c.JSON(iris.StatusOK, iris.Map{"status": "ok", "nilai_saldo": nilaiSaldo})
 	} else {
-		c.JSON(iris.StatusOK, iris.Map{"error": "Quorum tidak tercapai"})
+		c.JSON(iris.StatusOK, iris.Map{"status": "error", "reason": "Quorum tidak tercapai"})
 	}
 }
 
@@ -57,7 +63,7 @@ func ewalletGetTotalSaldo(c *iris.Context) {
 		err = stmt.QueryRow(userID).Scan(&ip)
 		db.Close()
 		if err != nil {
-			c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": -1})
+			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "nilai_saldo": -1})
 			return
 		}
 		if ip == "prakash.sisdis.ui.ac.id" || ip == "152.118.33.98" {
@@ -78,7 +84,7 @@ func ewalletGetTotalSaldo(c *iris.Context) {
 					}
 				}
 			}
-			c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": total})
+			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "nilai_saldo": total})
 		} else {
 			request, err := http.Get("https://" + ip + "/ewallet/getTotalSaldo?user_id=" + userID)
 			if err != nil {
@@ -88,12 +94,12 @@ func ewalletGetTotalSaldo(c *iris.Context) {
 				err = decodeJSON.Decode(&data)
 				if err != nil {
 				} else {
-					c.JSON(iris.StatusOK, iris.Map{"nilai_saldo": data.NilaiSaldo})
+					c.JSON(iris.StatusOK, iris.Map{"status": "ok", "nilai_saldo": data.NilaiSaldo})
 				}
 			}
 		}
 	} else {
-		c.JSON(iris.StatusOK, iris.Map{"error": "Quorum tidak tercapai"})
+		c.JSON(iris.StatusOK, iris.Map{"status": "error", "reason": "Quorum tidak tercapai"})
 	}
 }
 
@@ -106,10 +112,12 @@ func ewalletRegister(c *iris.Context) {
 		_, err = stmt.Exec(req.UserID, req.IPDomisili, req.Nama, 1000000)
 		db.Close()
 		if err != nil {
-			c.JSON(iris.StatusOK, iris.Map{"error": "Already Registered"})
+			c.JSON(iris.StatusOK, iris.Map{"status": "error", "reason": "Already Registered"})
+			return
 		}
+		c.JSON(iris.StatusOK, iris.Map{"status": "ok"})
 	} else {
-		c.JSON(iris.StatusOK, iris.Map{"error": "Quorum tidak tercapai"})
+		c.JSON(iris.StatusOK, iris.Map{"status": "error", "reason": "Quorum tidak tercapai"})
 	}
 }
 
@@ -135,13 +143,40 @@ func ewalletTransfer(c *iris.Context) {
 		_, err = stmt.Exec(newSaldo, req.UserID)
 		db.Close()
 		if err != nil {
-			c.JSON(iris.StatusOK, iris.Map{"status_transfer": -1})
+			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "status_transfer": -1})
 		} else {
-			c.JSON(iris.StatusOK, iris.Map{"status_transfer": 0})
+			c.JSON(iris.StatusOK, iris.Map{"status": "ok", "status_transfer": 0})
 		}
 	} else {
-		c.JSON(iris.StatusOK, iris.Map{"error": "Quorum tidak tercapai"})
+		c.JSON(iris.StatusOK, iris.Map{"status": "error", "reason": "Quorum tidak tercapai"})
 	}
+}
+
+func checkHealth(c *iris.Context) {
+	total := 0
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	listIP := [9]string{"192.168.75.70", "192.168.75.75", "192.168.75.77", "192.168.75.78", "192.168.75.81", "192.168.75.93", "192.168.75.98", "192.168.75.105", "192.168.75.106"}
+	for x := 0; x < 9; x++ {
+		request, err := client.Get("https://" + listIP[x] + "/ewallet/ping")
+		if err != nil {
+		} else {
+			decodeJSON := json.NewDecoder(request.Body)
+			var data JSONPing
+			err = decodeJSON.Decode(&data)
+			if err != nil {
+			} else {
+				total += data.Pong
+			}
+		}
+	}
+	c.JSON(iris.StatusOK, iris.Map{"count": total})
+}
+
+func ewalletDashboard(c *iris.Context) {
+	c.MustRender("ewallet.html", nil)
 }
 
 func checkQuorum() (total int) {

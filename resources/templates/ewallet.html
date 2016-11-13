@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E-Wallet Dashboard</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a data-toggle="tab" href="#ping">Ping</a></li>
+                    <li><a data-toggle="tab" href="#register">Register</a></li>
+                    <li><a data-toggle="tab" href="#transfer">Transfer</a></li>
+                    <li><a data-toggle="tab" href="#getSaldo">Get Saldo</a></li>
+                    <li><a data-toggle="tab" href="#getTotalSaldo">Get Total Saldo</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="ping" class="tab-pane fade in active">
+                        <h3>Ping</h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <form id="submitPing">
+                                    <div class="form-group">
+                                        <label>Kantor Cabang</label>
+                                        <select name="ip" class="form-control">
+                                            <option value="prakash.sisdis.ui.ac.id">prakash.sisdis.ui.ac.id</option>
+                                            <option value="aditya.sisdis.ui.ac.id">aditya.sisdis.ui.ac.id</option>
+                                            <option value="ratna.sisdis.ui.ac.id">ratna.sisdis.ui.ac.id</option>
+                                            <option value="azhari.sisdis.ui.ac.id">azhari.sisdis.ui.ac.id</option>
+                                            <option value="kurniawan.sisdis.ui.ac.id">kurniawan.sisdis.ui.ac.id</option>
+                                            <option value="alhafis.sisdis.ui.ac.id">alhafis.sisdis.ui.ac.id</option>
+                                            <option value="putra.sisdis.ui.ac.id">putra.sisdis.ui.ac.id</option>
+                                            <option value="radityo.sisdis.ui.ac.id">radityo.sisdis.ui.ac.id</option>
+                                            <option value="ilham.sisdis.ui.ac.id">ilham.sisdis.ui.ac.id</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="notifPing">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="register" class="tab-pane fade">
+                        <h3>Register</h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <form id="submitRegister">
+                                    <div class="form-group">
+                                        <label>User ID</label>
+                                        <input type="text" name="id" class="form-control" placeholder="1306409513" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nama</label>
+                                        <input type="text" name="nama" class="form-control" placeholder="Prakash Divy" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>IP Domisili</label>
+                                         <select name="ip" class="form-control">
+                                            <option value="prakash.sisdis.ui.ac.id">prakash.sisdis.ui.ac.id</option>
+                                            <option value="aditya.sisdis.ui.ac.id">aditya.sisdis.ui.ac.id</option>
+                                            <option value="ratna.sisdis.ui.ac.id">ratna.sisdis.ui.ac.id</option>
+                                            <option value="azhari.sisdis.ui.ac.id">azhari.sisdis.ui.ac.id</option>
+                                            <option value="kurniawan.sisdis.ui.ac.id">kurniawan.sisdis.ui.ac.id</option>
+                                            <option value="alhafis.sisdis.ui.ac.id">alhafis.sisdis.ui.ac.id</option>
+                                            <option value="putra.sisdis.ui.ac.id">putra.sisdis.ui.ac.id</option>
+                                            <option value="radityo.sisdis.ui.ac.id">radityo.sisdis.ui.ac.id</option>
+                                            <option value="ilham.sisdis.ui.ac.id">ilham.sisdis.ui.ac.id</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="notifRegister">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="transfer" class="tab-pane fade">
+                        <h3>Transfer</h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <form id="submitTransfer">
+                                    <div class="form-group">
+                                        <label>User ID</label>
+                                        <input type="text" name="id" class="form-control" placeholder="1306409513" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Jumlah Transfer</label>
+                                        <input type="text" name="jumlah" class="form-control" placeholder="100000" required="required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Kantor Cabang</label>
+                                         <select name="ip" class="form-control">
+                                            <option value="prakash.sisdis.ui.ac.id">prakash.sisdis.ui.ac.id</option>
+                                            <option value="aditya.sisdis.ui.ac.id">aditya.sisdis.ui.ac.id</option>
+                                            <option value="ratna.sisdis.ui.ac.id">ratna.sisdis.ui.ac.id</option>
+                                            <option value="azhari.sisdis.ui.ac.id">azhari.sisdis.ui.ac.id</option>
+                                            <option value="kurniawan.sisdis.ui.ac.id">kurniawan.sisdis.ui.ac.id</option>
+                                            <option value="alhafis.sisdis.ui.ac.id">alhafis.sisdis.ui.ac.id</option>
+                                            <option value="putra.sisdis.ui.ac.id">putra.sisdis.ui.ac.id</option>
+                                            <option value="radityo.sisdis.ui.ac.id">radityo.sisdis.ui.ac.id</option>
+                                            <option value="ilham.sisdis.ui.ac.id">ilham.sisdis.ui.ac.id</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="notifTransfer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="getSaldo" class="tab-pane fade">
+                        <h3>Get Saldo</h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <form id="submitGetSaldo">
+                                    <div class="form-group">
+                                        <label>User ID</label>
+                                        <input type="text" name="id" class="form-control" placeholder="1306409513" required="required">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="notifGetSaldo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="getTotalSaldo" class="tab-pane fade">
+                        <h3>Get Total Saldo</h3>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <form id="submitGetTotalSaldo">
+                                    <div class="form-group">
+                                        <label>User ID</label>
+                                        <input type="text" name="id" class="form-control" placeholder="1306409513" required="required">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div id="notifGetTotalSaldo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="/js/action.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
